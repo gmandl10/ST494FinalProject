@@ -1,4 +1,6 @@
 from auxillary import roc
+import pandas as pd
+import numpy as np
 
 
 def calculateADX (df, period = 14):
@@ -477,5 +479,14 @@ def createFeatures(data):
     so, so_signal = calculateStochasticOscillator(df)
     df["Stochastic_Oscillator"] = so
     df["Stochastic_Oscillator_Indicator"] = so_signal
+
+    if 'Stock Splits' in df.columns:
+        df.drop("Stock Splits", axis = 1, inplace = True)
+    if 'Dividends' in df.columns: 
+        df.drop("Dividends", axis = 1, inplace = True)
+    if "Adj Close" in df.columns:
+        df.drop("Adj Close", axis = 1, inplace= True)
+        
+    
 
     return df
