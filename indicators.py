@@ -268,7 +268,7 @@ def calculateMACD (df, long = 26, short = 12, lSignal = 9):
 
     return macd, MACDcrossover
 
- def calculateOBV(df):
+def calculateOBV(df):
     volume = df["Volume"]
     close = df["Close"]
     obv = []
@@ -433,3 +433,49 @@ def calculateStochasticOscillator (df, period = 14, signal = 3):
             stochastic_indicator.append("Neutral")
 
     return so, stochastic_indicator
+
+def createFeatures(data):
+    df = data.copy()
+
+    adx, adx_indicator = calculateADX(df)
+    df["ADX"] = adx
+    df["ADX_Indicator"] = adx_indicator
+
+    aroonup, aroondown, arooncrossover, aroonindicator = calculateAroon(df)
+    df["Aroon_Up"] = aroonup
+    df["Aroon_Down"] = aroondown
+    df["Aroon_Crossover"] =arooncrossover
+    df["Aroon_Indicator"] = aroonindicator
+
+    cci, cci_indicator = calculateCCI(df)
+    df["CCI"] = cci
+    df["CCI_Indicator"] = cci_indicator
+
+    disparity, disparityindicator = calculateDisparity(df)
+    df["Disparity"] = disparity
+    df["Disparity_Indicator"] = disparityindicator
+
+    kst, kst_crossover = calculateKST(df)
+    df["KST"] = kst
+    df["KST_Crossover"] = kst_crossover
+
+    macd, macdcrossover = calculateMACD(df)
+    df["MACD"]= macd
+    df["MACD_Crossover"] = macdcrossover
+
+    df["OBV"] = calculateOBV(df)
+
+    rsi, rsi_indicator = calculateRSI(df)
+    df["RSI"]= rsi
+    df["RSI_Indicator"] = rsi_indicator
+
+    rvi, rvi_crossover, rvi_divergence = calculateRVI(df)
+    df["RVI"] = rvi
+    df["RVI_Crossover"] = rvi_crossover
+    df["RVI_Divergence"] = rvi_divergence
+
+    so, so_signal = calculateStochasticOscillator(df)
+    df["Stochastic_Oscillator"] = so
+    df["Stochastic_Oscillator_Indicator"] = so_signal
+
+    return df
