@@ -34,7 +34,7 @@ def calculateADX (df, period = 14):
     adx = adx1.ewm(alpha = 1/period).mean()
 
     adx_indicator = []
-    adx_indicator.append("Neutral")
+    adx_indicator.append(0)
     i=1
 
     while i < len(adx):
@@ -42,11 +42,11 @@ def calculateADX (df, period = 14):
         adx2 = adx[i]
 
         if adx1 < 25 and adx2 > 25 and pdi[i] > ndi[i]:
-            adx_indicator.append("Buy")
+            adx_indicator.append(1)
         elif adx1 < 25 and adx2 > 25 and ndi[i] > pdi[i]:
-            adx_indicator.append("Sell")
+            adx_indicator.append(-1)
         else:
-            adx_indicator.append("Neutral")
+            adx_indicator.append(0)
         i+=1
         
     return adx, adx_indicator
@@ -70,7 +70,7 @@ def calculateAroon(df, period = 25):
     aroondown = 100 * low.rolling(period + 1).apply(lambda x: x.argmin()) / period
 
     aroon_crossover = []
-    aroon_crossover.append("Neutral")
+    aroon_crossover.append(0)
 
     i= 1
     while i < len(aroonup):
@@ -79,11 +79,11 @@ def calculateAroon(df, period = 25):
         aroondown1 = aroondown[i-1]
         aroondown2 = aroondown[i]
         if aroonup1 < aroondown1 and aroonup2 > aroondown2:
-            aroon_crossover.append("Long")
+            aroon_crossover.append(1)
         elif aroonup1 > aroondown1 and aroonup2 < aroondown2:
-            aroon_crossover.append("Short")
+            aroon_crossover.append(-1)
         else:
-            aroon_crossover.append("Neutral")
+            aroon_crossover.append(0)
         
         i += 1
 
@@ -94,13 +94,11 @@ def calculateAroon(df, period = 25):
         down = aroondown[i]
 
         if up > 70 and down < 30:
-            aroon_indicator.append("Long")
+            aroon_indicator.append(1)
         elif down > 70 and up < 30: 
-            aroon_indicator.append("Short")
-        elif down < 50 and up < 50:
-            aroon_indicator.append("PriceConsolidating")
+            aroon_indicator.append(-1)
         else:
-            aroon_indicator.append("Neutral")
+            aroon_indicator.append(0)
     
     return aroonup, aroondown, aroon_crossover, aroon_indicator
 
@@ -132,18 +130,18 @@ def calculateCCI(df, period = 20):
     oversold = -150
     overbought = 150
 
-    CCI_indicator.append("Neutral")
+    CCI_indicator.append(0)
 
     i = 1
     while i < len(cci):
         CCI1 = cci[i-1]
         CCI2 = cci[i]
         if CCI1 > oversold and CCI2 < oversold:
-            CCI_indicator.append("Buy")
+            CCI_indicator.append(1)
         elif CCI1 < overbought and CCI2 > overbought:
-            CCI_indicator.append("Sell")
+            CCI_indicator.append(-1)
         else:
-            CCI_indicator.append("Neutral")
+            CCI_indicator.append(0)
         i+=1
 
     return cci, CCI_indicator
@@ -168,7 +166,7 @@ def calculateDisparity(df, period = 14):
     disparity_indicator = []
 
     for _ in range(5):
-        disparity_indicator.append("Neutral")
+        disparity_indicator.append(0)
 
     i = 5
     while i < len(disparity):
@@ -180,11 +178,11 @@ def calculateDisparity(df, period = 14):
         ditoday = disparity[i]
 
         if di1 < 0 and di2 < 0 and di3 < 0 and di4 < 0 and di5 < 0 and ditoday > 0:
-            disparity_indicator.append("Buy")
+            disparity_indicator.append(1)
         elif di1 > 0 and di2 > 0 and di3 > 0 and di4 > 0 and di5 > 0 and ditoday < 0:
-            disparity_indicator.append("Sell")
+            disparity_indicator.append(-1)
         else:
-            disparity_indicator.append("Neutral")
+            disparity_indicator.append(0)
         
         i+=1
 
@@ -216,7 +214,7 @@ def calculateKST(df, signal = 9):
     kstsignal = kst.rolling(signal).mean()
 
     kst_crossover = []
-    kst_crossover.append("Neutral")
+    kst_crossover.append(0)
 
     i = 1
     while i < len(kst):
@@ -226,11 +224,11 @@ def calculateKST(df, signal = 9):
         signal2 = kstsignal[i]
 
         if kst1 < signal1 and kst2 > signal2:
-            kst_crossover.append("Buy")
+            kst_crossover.append(1)
         elif kst1 > signal1 and kst2 < signal2:
-            kst_crossover.append("Sell")
+            kst_crossover.append(-1)
         else:
-            kst_crossover.append("Neutral")
+            kst_crossover.append(0)
         i+=1
 
     return kst, kst_crossover
@@ -262,11 +260,11 @@ def calculateMACD (df, long = 26, short = 12, lSignal = 9):
         macd2 = macd[i]
         signal2 = signal[i]
         if macd1 < signal1 and macd2 > signal2:
-            MACDcrossover.append("Buy")
+            MACDcrossover.append(1)
         elif macd1 > signal1 and macd2 < signal2:
-            MACDcrossover.append("Sell")
+            MACDcrossover.append(-1)
         else:
-            MACDcrossover.append("Neutral")
+            MACDcrossover.append(0)
 
     return macd, MACDcrossover
 
@@ -321,11 +319,11 @@ def calculateRSI(df, period = 14):
     rsisignal = []
     for i in range(len(rsi)):
         if rsi[i] < 30:
-            rsisignal.append("Buy")
+            rsisignal.append(1)
         elif rsi[i] > 70:
-            rsisignal.append("Sell")
+            rsisignal.append(-1)
         else:
-            rsisignal.append("Neutral")
+            rsisignal.append(0)
     return rsi_, rsisignal
 
 def calculateRVI(df, period = 10):
@@ -369,7 +367,7 @@ def calculateRVI(df, period = 10):
     rvisignal = 1/6*(rvi+2*i+2*j+k)
 
     rvi_crossover = []
-    rvi_crossover.append("Neutral")
+    rvi_crossover.append(0)
 
     i = 1 
     while i < len(rvi):
@@ -378,14 +376,14 @@ def calculateRVI(df, period = 10):
         signal1 = rvisignal[i-1]
         signal2 = rvisignal[i]
         if rvi1 < signal1 and rvi2 > signal2:
-            rvi_crossover.append("Buy")
+            rvi_crossover.append(1)
         elif rvi1 > signal1 and rvi2 < signal2:
-            rvi_crossover.append("Sell")
+            rvi_crossover.append(-1)
         else:
-            rvi_crossover.append("Neutral")
+            rvi_crossover.append(0)
         i+=1
     rvi_divergence = []
-    rvi_divergence.append("Neutral")
+    rvi_divergence.append(0)
 
     i = 1 
     while i < len(rvi):
@@ -394,11 +392,11 @@ def calculateRVI(df, period = 10):
         price1 = close[i-1]
         price2 = close[i]
         if price2 > price1 and rvi2 < rvi1:
-            rvi_divergence.append("Sell")
+            rvi_divergence.append(-1)
         elif price1 > price2 and rvi1 < rvi2:
-            rvi_divergence.append("Buy")
+            rvi_divergence.append(1)
         else:
-            rvi_divergence.append("Neutral")
+            rvi_divergence.append(0)
         i+=1
     return rvi, rvi_crossover, rvi_divergence
 
@@ -428,11 +426,11 @@ def calculateStochasticOscillator (df, period = 14, signal = 3):
         s = so[i]
         ma = sosignal[i]
         if s < 20 and ma < 20 and s < ma:
-            stochastic_indicator.append("Buy")
+            stochastic_indicator.append(1)
         elif s > 80 and ma > 80 and s > ma:
-            stochastic_indicator.append("Sell")
+            stochastic_indicator.append(-1)
         else:
-            stochastic_indicator.append("Neutral")
+            stochastic_indicator.append(0)
 
     return so, stochastic_indicator
 
@@ -486,7 +484,7 @@ def createFeatures(data):
         df.drop("Dividends", axis = 1, inplace = True)
     if "Adj Close" in df.columns:
         df.drop("Adj Close", axis = 1, inplace= True)
-        
+
     
 
     return df
