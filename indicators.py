@@ -435,56 +435,50 @@ def calculateStochasticOscillator (df, period = 14, signal = 3):
     return so, stochastic_indicator
 
 def createFeatures(data):
-    df = data.copy()
+    df1 = pd.DataFrame() #continuous variables
+    df2 = pd.DataFrame() #categorical variables
 
-    adx, adx_indicator = calculateADX(df)
-    df["ADX"] = adx
-    df["ADX_Indicator"] = adx_indicator
+    adx, adx_indicator = calculateADX(data)
+    df1["ADX"] = adx
+    df2["ADX_Indicator"] = adx_indicator
 
-    aroonup, aroondown, arooncrossover, aroonindicator = calculateAroon(df)
-    df["Aroon_Up"] = aroonup
-    df["Aroon_Down"] = aroondown
-    df["Aroon_Crossover"] =arooncrossover
-    df["Aroon_Indicator"] = aroonindicator
+    aroonup, aroondown, arooncrossover, aroonindicator = calculateAroon(data)
+    df1["Aroon_Up"] = aroonup
+    df1["Aroon_Down"] = aroondown
+    df2["Aroon_Crossover"] =arooncrossover
+    df2["Aroon_Indicator"] = aroonindicator
 
-    cci, cci_indicator = calculateCCI(df)
-    df["CCI"] = cci
-    df["CCI_Indicator"] = cci_indicator
+    cci, cci_indicator = calculateCCI(data)
+    df1["CCI"] = cci
+    df2["CCI_Indicator"] = cci_indicator
 
-    disparity, disparityindicator = calculateDisparity(df)
-    df["Disparity"] = disparity
-    df["Disparity_Indicator"] = disparityindicator
+    disparity, disparityindicator = calculateDisparity(data)
+    df1["Disparity"] = disparity
+    df2["Disparity_Indicator"] = disparityindicator
 
-    kst, kst_crossover = calculateKST(df)
-    df["KST"] = kst
-    df["KST_Crossover"] = kst_crossover
+    kst, kst_crossover = calculateKST(data)
+    df1["KST"] = kst
+    df2["KST_Crossover"] = kst_crossover
 
-    macd, macdcrossover = calculateMACD(df)
-    df["MACD"]= macd
-    df["MACD_Crossover"] = macdcrossover
+    macd, macdcrossover = calculateMACD(data)
+    df1["MACD"]= macd
+    df2["MACD_Crossover"] = macdcrossover
 
-    df["OBV"] = calculateOBV(df)
+    df1["OBV"] = calculateOBV(data)
 
-    rsi, rsi_indicator = calculateRSI(df)
-    df["RSI"]= rsi
-    df["RSI_Indicator"] = rsi_indicator
+    rsi, rsi_indicator = calculateRSI(data)
+    df1["RSI"]= rsi
+    df2["RSI_Indicator"] = rsi_indicator
 
-    rvi, rvi_crossover, rvi_divergence = calculateRVI(df)
-    df["RVI"] = rvi
-    df["RVI_Crossover"] = rvi_crossover
-    df["RVI_Divergence"] = rvi_divergence
+    rvi, rvi_crossover, rvi_divergence = calculateRVI(data)
+    df1["RVI"] = rvi
+    df2["RVI_Crossover"] = rvi_crossover
+    df2["RVI_Divergence"] = rvi_divergence
 
-    so, so_signal = calculateStochasticOscillator(df)
-    df["Stochastic_Oscillator"] = so
-    df["Stochastic_Oscillator_Indicator"] = so_signal
+    so, so_signal = calculateStochasticOscillator(data)
+    df1["Stochastic_Oscillator"] = so
+    df2["Stochastic_Oscillator_Indicator"] = so_signal
 
-    if 'Stock Splits' in df.columns:
-        df.drop("Stock Splits", axis = 1, inplace = True)
-    if 'Dividends' in df.columns: 
-        df.drop("Dividends", axis = 1, inplace = True)
-    if "Adj Close" in df.columns:
-        df.drop("Adj Close", axis = 1, inplace= True)
-
-    
-
-    return df
+    df2.index = data.index
+    df1.index = data.index
+    return df1, df2
