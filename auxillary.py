@@ -34,6 +34,19 @@ def calculateFuturePriceChange(df, n):
     fpc = (df["Close"].shift(-n) - df["Close"])/df["Close"]
     return fpc
 
+def calculateFuturePriceClass(df,n):
+    """
+    Calculates if price rises n days in the future
+    Inputs:
+        df (DataFrame) - dataframe that contains the data of the equity of interest
+        n (int) - number of days in future
+    Outputs: 
+        fp (Series) - the future price behaviour of the equity 
+    """
+    fp_class = pd.cut(df["Close"].diff(-n), bins = [-100, -1, 100], labels = [0,1])
+    return fp_class
+
+
 def percentile(column):
     mu = column.mean()
     sigma = column.std()
