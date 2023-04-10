@@ -435,7 +435,7 @@ def calculateStochasticOscillator (df, period = 14, signal = 3):
     return so, stochastic_indicator
 
 def createFeatures(data):
-    df1 = data.copy() #continuous variables
+    df1 = pd.DataFrame() #continuous variables
     df2 = pd.DataFrame() #categorical variables
 
     adx, adx_indicator = calculateADX(data)
@@ -485,6 +485,7 @@ def createFeatures(data):
         df1.drop("Dividends", axis = 1)
     if "Adj Close" in df1.columns:
         df1.drop("Adj Close", axis = 1)
+        
     df2.index = data.index
     df1.index = data.index
     return df1, df2
