@@ -11,7 +11,7 @@ NORM_COLS = ["CCI", "Disparity", "KST", "MACD", "OBV", "RSI", "RVI", "Stochastic
 LOG_NORM_COLS = ["ADX", "ADX_ROC", "Aroon_Up_ROC", "Aroon_Down_ROC"]
 
 def processData(ticker, n):
-    prices = yf.Ticker(ticker).history("max")
+    prices = yf.Ticker(ticker).history("10y")
 
     prices = adjustPrices(prices)
     
