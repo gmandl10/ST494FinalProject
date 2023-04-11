@@ -49,4 +49,12 @@ def processData(ticker, n):
 
     clusterdf = pd.DataFrame(KMeans(n_clusters=6, n_init="auto").fit_transform(regular_df.dropna()), index = regular_df.dropna().index)
 
+    for i in clusterdf.columns:
+        new_name = "Cluster" + str(i)
+        clusterdf.rename({i: new_name}, axis =1, inplace = True)
+
+    for i in pc_df.columns:
+        new_name = "PC" + str(i)
+        pc_df.rename({i:new_name}, axis = 1, inplace=True)
+
     return prices, regular_df, target_df, clusterdf, pc_df
