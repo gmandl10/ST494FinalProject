@@ -87,3 +87,21 @@ def adjustPrices(df):
     data["Open"] = adj_open
 
     return data
+
+def trainTestSplit(df, train_proportion = 0.8):
+    split = int(train_proportion*len(df))
+    train = df.iloc[:split]
+    test = df.iloc[split:]
+    return train,test
+
+def cvSplit(df, k):
+    split = len(df) // k
+    train = []
+    val = []
+    for i in range(1,k+1):
+        train_ = df[:split*i]
+        val_ = df[split*i:split*(i+1)]
+        train.append(train_)
+        val.append(val_)
+
+    return train, val
